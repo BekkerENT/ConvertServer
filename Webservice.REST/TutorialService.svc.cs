@@ -9,15 +9,30 @@ using System.Text;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 
 
 namespace Webservice.REST
 {
     [ServiceContract(Namespace = "")]
+    [EnableCors(origins: "http://mywebclient.azurewebsites.net", headers: "*", methods: "*")]
     [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class TutorialService
     {
+        public static void Register(HttpConfiguration config)
+        {
+            // New code
+            config.EnableCors();
+
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+        }
+
+
         private static List<string> lst = new List<string>
         {
             "Arrays",
